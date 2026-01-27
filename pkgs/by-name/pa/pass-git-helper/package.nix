@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -20,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [ pyxdg ];
 
-  env.HOME = "$TMPDIR";
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   pythonImportsCheck = [ "passgithelper" ];
 
