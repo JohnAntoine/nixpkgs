@@ -68,6 +68,7 @@ let
         pathAbsoluteNaive -> ${pathAbsoluteNaive}
         pathAbsoluteFallback -> ${pathAbsoluteFallback}
       '' throw "${plugin.pname}: does not provide parse-able entry point";
+  yarnHash = "sha256-dpxzbtWyXsHS6tH6DJ9OqSsUSc+YqYeAPJYb95Qy5wQ=";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
@@ -89,8 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-+cDMrVwkTU5rYOQ7d2TqpsYx5F4JVZCpmf1vjOBhZ3M=";
+    inherit (finalAttrs) src missingHashes;
+    hash = yarnHash;
   };
 
   nativeBuildInputs = [
