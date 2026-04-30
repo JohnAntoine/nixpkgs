@@ -11,6 +11,7 @@
   openssl,
   postgresql,
   postgresqlTestHook,
+  nix-update-script,
 }:
 
 let
@@ -125,6 +126,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     MLN_PRECOMPILE = 1;
     MLN_CORE_LIBRARY_PATH = "${mlnLibrary}/libmbgl-core-amalgam.a";
     MLN_CORE_LIBRARY_HEADERS_PATH = "${mlnHeaders}";
+  };
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=martin-v(.*)"
+      "--subpackage=webui"
+    ];
   };
 
   meta = {
