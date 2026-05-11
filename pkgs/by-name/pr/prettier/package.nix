@@ -2,6 +2,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   lib,
+  fetchurl,
   makeBinaryWrapper,
   nodejs,
   pnpmConfigHook,
@@ -72,15 +73,15 @@ let
         pathAbsoluteFallback -> ${pathAbsoluteFallback}
       '' throw "${plugin.pname}: does not provide parse-able entry point";
 
-  yarnHash = "sha256-WncAReGKs9cZvPTf87bKKOrmte5ORyHOb5pTAgHsb8M=";
+  yarnHash = "sha256-KQywjBgJcT6CXT8bd11wT26qmfLen8E/gXhPBA5TY9A=";
 
   prettier-oxc-wasm-parser = stdenv.mkDerivation (finalAttrs: {
     pname = "binding-wasm32-wasi";
     version = "0.99.0";
 
-    src = builtins.fetchTarball {
+    src = fetchurl {
       url = "https://registry.npmjs.org/@oxc-parser/${finalAttrs.pname}/-/${finalAttrs.pname}-${finalAttrs.version}.tgz";
-      sha256 = "05ndf32qlx5qnrp0r4jrgb8219mihvha68b1jcvk24ys76gpmxpm";
+      sha256 = "sha256-7qPLrjsQ6+F565/k4HbVtcbr5HDok5AcaR8W+zTy/SM=";
     };
 
     nativeBuildInputs = [
@@ -89,21 +90,21 @@ let
       pnpm_9
     ];
 
-    prePnpmInstall = ''
-      install --mode=644 -T ${./pnpm-lock_prettier-oxc-wasm-parser.yaml} ./pnpm-lock.yaml
-    '';
+    patches = [
+      ./pnpm-lock_prettier-oxc-wasm-parser.patch
+    ];
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs)
         pname
         version
         src
-        prePnpmInstall
+        patches
         ;
 
       pnpm = pnpm_9;
-      fetcherVersion = 2;
-      hash = "sha256-i3zxUTy8vRo+Scn+ZQkZ2/j9emjurCNR4Cz8C8XsHjQ=";
+      fetcherVersion = 3;
+      hash = "sha256-WPsVL05rVku2YSbfjHX4/BoFM+qvIm4sZip7pISg0vA=";
     };
 
     buildPhase = ''
@@ -132,13 +133,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
-  version = "3.8.1";
+  version = "3.8.3";
 
   src = fetchFromGitHub {
     owner = "prettier";
     repo = "prettier";
     tag = finalAttrs.version;
-    hash = "sha256-SzrpkWyT/Vdt21KUQ0cTQ0QmCivazY6rrgmApsvXZWs=";
+    hash = "sha256-7B8AnLPC2CcgdR/Jz0TvMhqYCCEf345U6xlWB7QaIqg=";
   };
 
   patches = [
@@ -150,7 +151,8 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
+
+    inherit (finalAttrs) src missingHashes patches;
     hash = yarnHash;
 
   };
