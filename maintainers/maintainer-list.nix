@@ -11270,6 +11270,12 @@
     githubId = 1031119;
     name = "Ian-Woo Kim";
   };
+  ibbem = {
+    name = "ibbem";
+    github = "ibbem";
+    githubId = 61984399;
+    email = "ibbem@ibbem.net";
+  };
   ibizaman = {
     email = "ibizapeanut@gmail.com";
     github = "ibizaman";
