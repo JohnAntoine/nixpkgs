@@ -37,6 +37,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       hmenke
+      ibbem
     ];
     mainProgram = "pass-git-helper";
   };
